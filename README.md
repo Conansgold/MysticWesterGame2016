@@ -5,3 +5,4 @@ Sound engineer: Jeff McMillen
 Lead Artist: Keighla Peterson
 Artist: Jessica Chambers
 Using: Unity standard scripts and Kenney Art Assets from Itch.io
+Also some old code comes from a tutorial by Sebastian Lague on Youtube

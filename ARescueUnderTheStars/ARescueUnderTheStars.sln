@@ -1,11 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARescueUnderTheStars.CSharp.Plugins", "ARescueUnderTheStars.CSharp.Plugins.csproj", "{88001FC6-14B5-9955-1AD5-8F39DE33628F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARescueUnderTheStars.CSharp", "ARescueUnderTheStars.CSharp.csproj", "{38055C10-85AB-B641-0F4F-F6E49A3769AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARescueUnderTheStars.CSharp.Editor", "ARescueUnderTheStars.CSharp.Editor.csproj", "{CC378904-7558-2169-44D6-1D1D7344BD53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,18 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{88001FC6-14B5-9955-1AD5-8F39DE33628F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88001FC6-14B5-9955-1AD5-8F39DE33628F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88001FC6-14B5-9955-1AD5-8F39DE33628F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88001FC6-14B5-9955-1AD5-8F39DE33628F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{38055C10-85AB-B641-0F4F-F6E49A3769AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{38055C10-85AB-B641-0F4F-F6E49A3769AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38055C10-85AB-B641-0F4F-F6E49A3769AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38055C10-85AB-B641-0F4F-F6E49A3769AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC378904-7558-2169-44D6-1D1D7344BD53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC378904-7558-2169-44D6-1D1D7344BD53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC378904-7558-2169-44D6-1D1D7344BD53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC378904-7558-2169-44D6-1D1D7344BD53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
