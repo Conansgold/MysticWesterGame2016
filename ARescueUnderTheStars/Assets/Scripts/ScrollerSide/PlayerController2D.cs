@@ -53,7 +53,6 @@ public class PlayerController2D : RaycastController
             print("On Platform" + 1);
             collisions.below = true;
         }
-        print(collisions.climbingSlope + "   and down  " + collisions.descendingSlope + " And below "+collisions.below);
     }
 
     void HorizontalCollisions(ref Vector3 velocity)
@@ -160,7 +159,6 @@ public class PlayerController2D : RaycastController
                     velocity.x = velocity.y / Mathf.Tan(collisions.slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(velocity.x);
                 }
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
-                print("Before verical " + collisions.below + "   "+ slopeAngle);
                 if (slopeAngle < maxClimbAngle)
                 {
                     collisions.below = directionY == -1;
@@ -170,7 +168,6 @@ public class PlayerController2D : RaycastController
                     collisions.descendingSlope = true;
                     collisions.below = false;
                 }
-                print("After verical " + collisions.below);
                 collisions.above = directionY == 1;
             }
         }
