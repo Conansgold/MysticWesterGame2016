@@ -18,6 +18,15 @@ public class PlayerController2D : RaycastController
 
     }
 
+    public void FaceDir(Vector2 input)
+    {
+        if (input.x != 0)
+        {
+            collisions.faceDir = (int)input.x;
+            gameObject.transform.localScale = new Vector2(collisions.faceDir, 1);
+        }
+    }
+
     public void Move(Vector3 velocity, bool standingOnPlatform)
     {
         Move(velocity, Vector2.zero, standingOnPlatform);
@@ -29,11 +38,6 @@ public class PlayerController2D : RaycastController
         collisions.Reset();
         collisions.velocityOld = velocity;
         playerInput = input;
-
-        if (velocity.x != 0)
-        {
-            collisions.faceDir = (int)Mathf.Sign(velocity.x);
-        }
 
         if (velocity.y < 0)
         {

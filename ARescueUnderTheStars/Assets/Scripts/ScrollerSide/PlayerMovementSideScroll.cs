@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(PlayerController2D))]
 public class PlayerMovementSideScroll : MonoBehaviour
 {
-
     public float maxJumpHeight = 4;
     public float minJumpHeight = 1;
     public float timeToJumpApex = .4f;
@@ -28,6 +27,16 @@ public class PlayerMovementSideScroll : MonoBehaviour
 
     PlayerController2D controller;
 
+    public Transform firePoint;
+    public GameObject gunBullet;
+
+    bool m_isAxisInUse = false;
+
+    private Quaternion pieceRotation;
+    private float shotTimer = 0;
+    private int clipLeft = 60;
+    private float shotTimerReset = .5f;
+
     void Start()
     {
         controller = GetComponent<PlayerController2D>();
@@ -39,13 +48,33 @@ public class PlayerMovementSideScroll : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetAxis("Fire1")>0)
-        { 
-            Instantiate<Shot>
+
+        if (clipLeft > 0 && shotTimer <= 0 && Input.GetAxisRaw("Fire1") != 0)
+        {
+            if (m_isAxisInUse == false)
+            {
+                pieceRotation = Quaternion.AngleAxis(90, Vector3.forward);
+                Instantiate(gunBullet, firePoint.position, pieceRotation);
+
+                clipLeft -= 1;
+                shotTimer = shotTimerReset;
+
+                m_isAxisInUse = true;
+                
+            }
+        }
+        if (Input.GetAxisRaw("Fire1") == 0)
+        {
+            m_isAxisInUse = false;
         }
 
+        shotTimer -= Time.deltaTime;
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         int wallDirX = (controller.collisions.left) ? -1 : 1;
+
+        Debug.Log(input.x);
+
+        controller.FaceDir(input);
 
         float targetVelocityX = input.x * moveSpeed;
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
