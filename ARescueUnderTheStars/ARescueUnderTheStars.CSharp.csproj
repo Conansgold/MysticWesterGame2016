@@ -70,10 +70,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\GeneralButton.cs" />
-    <Compile Include="Assets\Scripts\GeneralButtonEditor.cs" />
     <Compile Include="Assets\Scripts\Globals.cs" />
     <Compile Include="Assets\Scripts\RelativeFunctions.cs" />
+    <Compile Include="Assets\Scripts\ScrollerSide\AudioFade.cs" />
     <Compile Include="Assets\Scripts\ScrollerSide\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\ScrollerSide\DoorInformation.cs" />
+    <Compile Include="Assets\Scripts\ScrollerSide\LightChange.cs" />
+    <Compile Include="Assets\Scripts\ScrollerSide\Paralax.cs" />
     <Compile Include="Assets\Scripts\ScrollerSide\PlatformController.cs" />
     <Compile Include="Assets\Scripts\ScrollerSide\PlayerActions.cs" />
     <Compile Include="Assets\Scripts\ScrollerSide\PlayerController2D.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="Assets\Scripts\ScrollerSide\PlayerMovementSideScroll.cs" />
     <Compile Include="Assets\Scripts\ScrollerSide\RaycastController.cs" />
     <Compile Include="Assets\Scripts\ScrollerSide\ShotMovement.cs" />
+    <Compile Include="Assets\Scripts\ScrollerSide\Star.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

@@ -9,7 +9,7 @@ public class PlayerMovementSideScroll : MonoBehaviour
     public float timeToJumpApex = .4f;
     float accelerationTimeAirborne = .2f;
     float accelerationTimeGrounded = .1f;
-    float moveSpeed = 6;
+    public float moveSpeed = 5;
 
     public Vector2 wallJumpClimb;
     public Vector2 wallJumpOff;
@@ -37,6 +37,10 @@ public class PlayerMovementSideScroll : MonoBehaviour
     private int clipLeft = 60;
     private float shotTimerReset = .5f;
 
+
+    public int starCount = 0;
+    public AudioClip FireSound;
+
     void Start()
     {
         controller = GetComponent<PlayerController2D>();
@@ -49,12 +53,16 @@ public class PlayerMovementSideScroll : MonoBehaviour
     void Update()
     {
 
-        if (clipLeft > 0 && shotTimer <= 0 && Input.GetAxisRaw("Fire1") != 0)
+        if (shotTimer <= 0 && Input.GetAxisRaw("Fire1") != 0)
         {
             if (m_isAxisInUse == false)
             {
+                GetComponent<AudioSource>().clip = FireSound;
                 pieceRotation = Quaternion.AngleAxis(90, Vector3.forward);
+                GetComponent<AudioSource>().volume = .03f;
+                GetComponent<AudioSource>().Play();
                 Instantiate(gunBullet, firePoint.position, pieceRotation);
+                
 
                 clipLeft -= 1;
                 shotTimer = shotTimerReset;
@@ -71,8 +79,6 @@ public class PlayerMovementSideScroll : MonoBehaviour
         shotTimer -= Time.deltaTime;
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         int wallDirX = (controller.collisions.left) ? -1 : 1;
-
-        Debug.Log(input.x);
 
         controller.FaceDir(input);
 
@@ -149,5 +155,72 @@ public class PlayerMovementSideScroll : MonoBehaviour
             velocity.y = 0;
         }
 
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.transform.tag == "Star")
+        {
+            if (!coll.GetComponent<Star>().collected)
+            {
+                starCount += 1;
+                coll.transform.localScale = coll.transform.localScale * .25f;
+                coll.transform.parent = GameObject.FindGameObjectWithTag("Paralax").transform;
+                for (int i = 0; i < coll.gameObject.transform.childCount; i++)
+                {
+                    Transform Go = coll.gameObject.transform.GetChild(i);
+                    Go.localScale = Go.localScale * .25f;
+                }
+                coll.transform.position = coll.GetComponent<Star>().StarLocation;
+                coll.GetComponent<Star>().collected = true;
+            }
+            //Destroy(coll.gameObject);
+        }
+        if(coll.transform.tag == "Dimmer")
+        {
+            GameObject.FindGameObjectWithTag("MainLight").GetComponent<Light>().intensity -= .1f;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D coll)
+    {
+        if (coll.transform.tag == "Dimmer")
+        {
+            Debug.Log("Dimmed");
+            GameObject.FindGameObjectWithTag("MainLight").GetComponent<Light>().intensity += .1f;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        if (coll.transform.tag == "Box")
+        {
+           // coll.GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(5* velocity.x, -1), gameObject.transform.position);
+        }
+        
+        if (coll.transform.tag == "Door")
+        {
+            if (coll.GetComponent<DoorInformation>().optional)
+            {
+                if (Input.GetAxis("Vertical") > .6)
+                {
+                    transform.position = coll.GetComponent<DoorInformation>().TargetDoor.transform.position + new Vector3( coll.GetComponent<DoorInformation>().xOffset, 0);
+                }
+            }
+            else
+            {
+                Debug.Log("And time to teleport");
+                transform.position = coll.GetComponent<DoorInformation>().TargetDoor.transform.position + new Vector3(coll.GetComponent<DoorInformation>().xOffset, 0);
+            }
+        }
+        
+    }
+
+   void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.transform.tag == "Topple")
+        {
+            ;//coll.rigidbody.AddForceAtPosition(velocity * 15 + new Vector3(0,-3), gameObject.transform.position);
+        }
     }
 }
