@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraFollow : MonoBehaviour
 {
 
-    public PlayerController2D target;
+    public GameObject target;
     public float verticalOffset;
     public float lookAheadDstX;
     public float lookSmoothTimeX;
@@ -25,7 +25,7 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
-        focusArea = new FocusArea(target.collider.bounds, focusAreaSize);
+        focusArea = new FocusArea(target.GetComponent<PlayerController2D>().collider.bounds, focusAreaSize);
     }
 
     void LateUpdate()
@@ -36,14 +36,14 @@ public class CameraFollow : MonoBehaviour
         }
         else
         {
-            focusArea.Update(target.collider.bounds);
+            focusArea.Update(target.GetComponent<PlayerController2D>().collider.bounds);
 
             Vector2 focusPosition = focusArea.centre + Vector2.up * verticalOffset;
 
             if (focusArea.velocity.x != 0)
             {
                 lookAheadDirX = Mathf.Sign(focusArea.velocity.x);
-                if (Mathf.Sign(target.playerInput.x) == Mathf.Sign(focusArea.velocity.x) && target.playerInput.x != 0)
+                if (Mathf.Sign(target.GetComponent<PlayerController2D>().playerInput.x) == Mathf.Sign(focusArea.velocity.x) && target.GetComponent<PlayerController2D>().playerInput.x != 0)
                 {
                     lookAheadStopped = false;
                     targetLookAheadX = lookAheadDirX * lookAheadDstX;

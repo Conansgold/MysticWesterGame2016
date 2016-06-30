@@ -5,5 +5,5 @@ public class Star : MonoBehaviour {
 
     public bool collected;
 
-    public Vector3 StarLocation;
+    public GameObject target;
 }

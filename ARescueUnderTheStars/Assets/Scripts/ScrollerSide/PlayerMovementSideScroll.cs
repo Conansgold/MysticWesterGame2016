@@ -40,6 +40,7 @@ public class PlayerMovementSideScroll : MonoBehaviour
 
     public int starCount = 0;
     public AudioClip FireSound;
+   
 
     void Start()
     {
@@ -50,136 +51,165 @@ public class PlayerMovementSideScroll : MonoBehaviour
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
     }
 
-    void Update()
-    {
 
-        if (shotTimer <= 0 && Input.GetAxisRaw("Fire1") != 0)
-        {
-            if (m_isAxisInUse == false)
-            {
-                GetComponent<AudioSource>().clip = FireSound;
-                pieceRotation = Quaternion.AngleAxis(90, Vector3.forward);
-                GetComponent<AudioSource>().volume = .03f;
-                GetComponent<AudioSource>().Play();
-                Instantiate(gunBullet, firePoint.position, pieceRotation);
-                
-
-                clipLeft -= 1;
-                shotTimer = shotTimerReset;
-
-                m_isAxisInUse = true;
-                
-            }
-        }
-        if (Input.GetAxisRaw("Fire1") == 0)
-        {
-            m_isAxisInUse = false;
-        }
-
-        shotTimer -= Time.deltaTime;
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        int wallDirX = (controller.collisions.left) ? -1 : 1;
-
-        controller.FaceDir(input);
-
-        float targetVelocityX = input.x * moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-
-        bool wallSliding = false;
-        if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0)
-        {
-            wallSliding = true;
-
-            if (velocity.y < -wallSlideSpeedMax)
-            {
-                velocity.y = -wallSlideSpeedMax;
-            }
-
-            if (timeToWallUnstick > 0)
-            {
-                velocityXSmoothing = 0;
-                velocity.x = 0;
-
-                if (input.x != wallDirX && input.x != 0)
-                {
-                    timeToWallUnstick -= Time.deltaTime;
-                }
-                else {
-                    timeToWallUnstick = wallStickTime;
-                }
-            }
-            else {
-                timeToWallUnstick = wallStickTime;
-            }
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (wallSliding)
-            {
-                if (wallDirX == input.x)
-                {
-                    velocity.x = -wallDirX * wallJumpClimb.x;
-                    velocity.y = wallJumpClimb.y;
-                }
-                else if (input.x == 0)
-                {
-                    velocity.x = -wallDirX * wallJumpOff.x;
-                    velocity.y = wallJumpOff.y;
-                }
-                else {
-                    velocity.x = -wallDirX * wallLeap.x;
-                    velocity.y = wallLeap.y;
-                }
-            }
-            if (controller.collisions.below)
-            {
-                velocity.y = maxJumpVelocity;
-            }
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            if (velocity.y > minJumpVelocity)
-            {
-                velocity.y = minJumpVelocity;
-            }
-        }
+     void OnGUI()
+     {
+        GUI.Label(new Rect(15 , 10, 200, 100), starCount + " / 5");
+     }
 
 
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime, input);
+     void Update()
+     {
+         if(starCount == 5)
+         {
+             Camera.main.orthographicSize = 55;
+             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>().target = GameObject.FindGameObjectWithTag("Paralax");
+         }
 
-        if (controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
+         if (shotTimer <= 0 && Input.GetAxisRaw("Fire1") != 0)
+         {
+             if (m_isAxisInUse == false)
+             {
+                 GetComponent<AudioSource>().clip = FireSound;
+                 pieceRotation = Quaternion.AngleAxis(90, Vector3.forward);
+                 GetComponent<AudioSource>().volume = .03f;
+                 GetComponent<AudioSource>().Play();
+                 Instantiate(gunBullet, firePoint.position, pieceRotation);
 
-    }
 
-    void OnTriggerEnter2D(Collider2D coll)
+                 clipLeft -= 1;
+                 shotTimer = shotTimerReset;
+
+                 m_isAxisInUse = true;
+
+             }
+         }
+         if (Input.GetAxisRaw("Fire1") == 0)
+         {
+             m_isAxisInUse = false;
+         }
+
+         shotTimer -= Time.deltaTime;
+         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+         int wallDirX = (controller.collisions.left) ? -1 : 1;
+
+         controller.FaceDir(input);
+
+         float targetVelocityX = input.x * moveSpeed;
+         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
+
+         bool wallSliding = false;
+         if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0)
+         {
+             wallSliding = true;
+
+             if (velocity.y < -wallSlideSpeedMax)
+             {
+                 velocity.y = -wallSlideSpeedMax;
+             }
+
+             if (timeToWallUnstick > 0)
+             {
+                 velocityXSmoothing = 0;
+                 velocity.x = 0;
+
+                 if (input.x != wallDirX && input.x != 0)
+                 {
+                     timeToWallUnstick -= Time.deltaTime;
+                 }
+                 else {
+                     timeToWallUnstick = wallStickTime;
+                 }
+             }
+             else {
+                 timeToWallUnstick = wallStickTime;
+             }
+
+         }
+
+         if (Input.GetKeyDown(KeyCode.Space))
+         {
+             if (wallSliding)
+             {
+                 if (wallDirX == input.x)
+                 {
+                     velocity.x = -wallDirX * wallJumpClimb.x;
+                     velocity.y = wallJumpClimb.y;
+                 }
+                 else if (input.x == 0)
+                 {
+                     velocity.x = -wallDirX * wallJumpOff.x;
+                     velocity.y = wallJumpOff.y;
+                 }
+                 else {
+                     velocity.x = -wallDirX * wallLeap.x;
+                     velocity.y = wallLeap.y;
+                 }
+             }
+             if (controller.collisions.below)
+             {
+                 velocity.y = maxJumpVelocity;
+             }
+         }
+         if (Input.GetKeyUp(KeyCode.Space))
+         {
+             if (velocity.y > minJumpVelocity)
+             {
+                 velocity.y = minJumpVelocity;
+             }
+         }
+
+
+         velocity.y += gravity * Time.deltaTime;
+         controller.Move(velocity * Time.deltaTime, input);
+
+         if (controller.collisions.above || controller.collisions.below)
+         {
+             velocity.y = 0;
+         }
+
+     }
+
+     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.transform.tag == "Star")
-        {
-            if (!coll.GetComponent<Star>().collected)
-            {
-                starCount += 1;
-                coll.transform.localScale = coll.transform.localScale * .25f;
-                coll.transform.parent = GameObject.FindGameObjectWithTag("Paralax").transform;
-                for (int i = 0; i < coll.gameObject.transform.childCount; i++)
-                {
-                    Transform Go = coll.gameObject.transform.GetChild(i);
-                    Go.localScale = Go.localScale * .25f;
-                }
-                coll.transform.position = coll.GetComponent<Star>().StarLocation;
+         {
+             if (!coll.GetComponent<Star>().collected)
+             {
+                 starCount += 1;
+                 /*
+                 coll.transform.localScale = coll.transform.localScale * .25f;
+                 coll.transform.parent = GameObject.FindGameObjectWithTag("Paralax").transform;
+                 for (int i = 0; i < coll.gameObject.transform.childCount; i++)
+                 {
+                     Transform Go = coll.gameObject.transform.GetChild(i);
+                     Go.localScale = Go.localScale * .25f;
+                 }
+                 coll.transform.position = coll.GetComponent<Star>().StarLocation;*/
                 coll.GetComponent<Star>().collected = true;
+                coll.GetComponent<Star>().target.SetActive(true);
             }
-            //Destroy(coll.gameObject);
+            Destroy(coll.gameObject);
         }
         if(coll.transform.tag == "Dimmer")
         {
             GameObject.FindGameObjectWithTag("MainLight").GetComponent<Light>().intensity -= .1f;
         }
+
+        if (coll.transform.tag == "FadeTo1")
+        {
+            GameObject.FindGameObjectWithTag("Music").GetComponent<AudioFade>().fadingto1 = true;
+        }
+        if (coll.transform.tag == "FadeTo2")
+        {
+            GameObject.FindGameObjectWithTag("Music").GetComponent<AudioFade>().fadingto2 = true;
+        }
+        if (coll.transform.tag == "FadeTo3")
+        {
+            Debug.Log("Music3");
+            GameObject.FindGameObjectWithTag("Music").GetComponent<AudioFade>().fadingto3 = true;
+        }
+
     }
 
     void OnTriggerExit2D(Collider2D coll)
@@ -213,7 +243,7 @@ public class PlayerMovementSideScroll : MonoBehaviour
                 transform.position = coll.GetComponent<DoorInformation>().TargetDoor.transform.position + new Vector3(coll.GetComponent<DoorInformation>().xOffset, 0);
             }
         }
-        
+
     }
 
    void OnCollisionEnter2D(Collision2D coll)
